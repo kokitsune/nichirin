@@ -11,7 +11,6 @@ class XOR(object):
     '''
     def __init__(self, original):
         self.original = original
-        self.encrypted = ''
     def __str__(self):
         return self.original
     def get_key(self, stat, key):
@@ -19,17 +18,27 @@ class XOR(object):
             key = bin(ord(key))
         elif stat == 'num':
             key = bin(key)
-        return key.replace('b', '')
+        return '%8s'.replace(' ', '0') % key.replace('b', '')
     def encryption(self):
+        '''
+        It's both the encryption and decryption actually.
+        '''
+        self.encrypted = ''
         for longgong in self.original:
             temp = ''
-            for tower, rook in zip(bin(ord(longgong)).replace('b', ''), self.key):
+            longgong = '%8s' % bin(ord(longgong)).replace('b', '')
+            for tower, rook in zip(longgong.replace(' ', '0'), self.key):
                 if tower == rook:
                     temp += '0'
                 else:
                     temp += '1'
-            print temp
+            print longgong.replace(' ', '0'), self.key
             self.encrypted += chr(int(temp, 2))
         return self.encrypted
-# Eh...Mac if you do see this. Please make the resulting binaries
-#length from 7 to 8 please.
+    def decryption(self):
+        '''
+        A layout for other methods.
+        '''
+        pass
+
+
