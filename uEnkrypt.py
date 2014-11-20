@@ -11,15 +11,16 @@ class XOR(object):
     '''
     def __init__(self, original='Default', key='00000000'):
         self.original = original
-        self.key = '0'*(8-len(key))+key.replace('b', '')
+        self.key = key[-6:]
+        self.key = '0'*(8-len(self.key))+self.key.replace('b', '')
     def __str__(self):
         return self.original
-    def get_key(self, stat='bin', key='00000000'):#Maximum MUST be 01111111
-        if stat == 'character':
-            self.key = bin(ord(key))
-        elif stat == 'num':
+    def get_key(self, stat='bin', key='00000000'):#Maximum MUST be 00111111
+        if stat == 'num':
             self.key = bin(key)
-        self.key = key
+        else:
+            self.key = key
+        self.key = key[-6:]
         self.key = '0'*(8-len(self.key))+self.key.replace('b', '')
         return self.key
     def encryption(self):
@@ -73,7 +74,16 @@ class CipherDisk(object):
                 self.encrypted += longgong
         return self.encrypted
     def decryption(self):
-        pass
+        self.decrypted = ''
+        for longgong in self.original:
+            if longgong in self.disk:
+                self.decrypted += self.disk[abs(self.disk.index(longgong)-self.turn)%len(self.disk)]
+            elif longgong.upper() in self.disk:
+                self.decrypted += self.disk[abs(self.disk.index(longgong.upper())-self.turn)%len(self.disk)].lower()
+            else:
+                self.decrypted += longgong
+        return self.decrypted
+    
 
 
 
