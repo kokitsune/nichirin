@@ -4,6 +4,36 @@ Project ala Pegeant:
 '''
 from Tkinter import *
 
+class App(object):
+    """
+    Simple Interface. It might change later.
+    """
+    def __init__(self, master):
+        frame = Frame(master)
+        frame.pack()
+        
+        self.label = Label(root, text='uEnkrypt')
+        self.label.pack()
+
+        self.label = Label(root, text='Choose your mode')
+        self.label.pack()
+        
+        self.button = Button(root, text='XOR Mode')
+        self.button.pack()
+
+        self.button = Button(root, text='Cypher Mode')
+        self.button.pack()
+
+        self.button = Button(root, command=frame.quit, text='Exit')
+        self.button.pack()
+        
+root = Tk()
+
+app = App(root)
+
+root.mainloop()
+root.destroy()
+    
 class XOR(object):
     '''
     For operation concerning XOR method.
