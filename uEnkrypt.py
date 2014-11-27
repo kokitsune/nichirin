@@ -73,6 +73,15 @@ class XOR(object):
         A layout for other methods.
         '''
         pass
+    def save(self, filename='untitled'):
+        text = open('%s.txt' % filename, 'w')
+        text.write(self.key)
+        text.write('834567')
+        text.write(self.encrypted)
+    def load(self, filename='untitled'):
+        text = open('%s.txt' % filename, 'r')
+        self.key, self.encrypted = tuple(text.read().split('834567'))
+        
 
 class CipherDisk(object):
     '''
