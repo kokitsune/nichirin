@@ -4,36 +4,6 @@ Project ala Pegeant:
 '''
 from Tkinter import *
 
-class App(object):
-    """
-    Simple Interface. It might change later.
-    """
-    def __init__(self, master):
-        frame = Frame(master)
-        frame.pack()
-        
-        self.label = Label(root, text='uEnkrypt')
-        self.label.pack()
-
-        self.label = Label(root, text='Choose your mode')
-        self.label.pack()
-        
-        self.button = Button(root, text='XOR Mode')
-        self.button.pack()
-
-        self.button = Button(root, text='Cypher Mode')
-        self.button.pack()
-
-        self.button = Button(root, command=frame.quit, text='Exit')
-        self.button.pack()
-        
-root = Tk()
-
-app = App(root)
-
-root.mainloop()
-root.destroy()
-    
 class XOR(object):
     '''
     For operation concerning XOR method.
@@ -41,15 +11,16 @@ class XOR(object):
     '''
     def __init__(self, original='Default', key='00000000'):
         self.original = original
-        self.key = '0'*(8-len(key))+key.replace('b', '')
+        self.key = key[-6:]
+        self.key = '0'*(8-len(self.key))+self.key.replace('b', '')
     def __str__(self):
         return self.original
-    def get_key(self, stat='bin', key='00000000'):#Maximum MUST be 01111111
-        if stat == 'character':
-            self.key = bin(ord(key))
-        elif stat == 'num':
+    def get_key(self, stat='bin', key='00000000'):#Maximum MUST be 00111111
+        if stat == 'num':
             self.key = bin(key)
-        self.key = key
+        else:
+            self.key = key
+        self.key = key[-6:]
         self.key = '0'*(8-len(self.key))+self.key.replace('b', '')
         return self.key
     def encryption(self):
@@ -76,11 +47,11 @@ class XOR(object):
     def save(self, filename='untitled'):
         text = open('%s.txt' % filename, 'w')
         text.write(self.key)
-        text.write('834567')
+        text.write('834longgong567')
         text.write(self.encrypted)
     def load(self, filename='untitled'):
         text = open('%s.txt' % filename, 'r')
-        self.key, self.encrypted = tuple(text.read().split('834567'))
+        self.key, self.encrypted = tuple(text.read().split('834longgong567'))
         
 
 class CipherDisk(object):
@@ -112,7 +83,25 @@ class CipherDisk(object):
                 self.encrypted += longgong
         return self.encrypted
     def decryption(self):
-        pass
+        self.decrypted = ''
+        for longgong in self.original:
+            if longgong in self.disk:
+                self.decrypted += self.disk[abs(self.disk.index(longgong)-self.turn)%len(self.disk)]
+            elif longgong.upper() in self.disk:
+                self.decrypted += self.disk[abs(self.disk.index(longgong.upper())-self.turn)%len(self.disk)].lower()
+            else:
+                self.decrypted += longgong
+        return self.decrypted
+    def save(self, filename='untitled'):
+        text = open('%s.txt' % filename, 'w')
+        text.write(self.key)
+        text.write('834longgong567')
+        text.write(self.encrypted)
+    def load(self, filename='untitled'):
+        text = open('%s.txt' % filename, 'r')
+        self.key, self.encrypted = tuple(text.read().split('834longgong567'))
+    
+    
 
 
 
