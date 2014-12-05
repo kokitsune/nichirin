@@ -4,9 +4,9 @@ Project ala Pegeant:
 '''
 
 from Tkinter import *
-from os import *
+import os
 
-class XOR(object):
+class XOR:
     '''
     For operation concerning XOR method.
     Attribute : A sequence of character.
@@ -46,17 +46,9 @@ class XOR(object):
         A layout for other methods.
         '''
         pass
-    def save(self, filename='untitled'):
-        text = open('%s.txt' % filename, 'w')
-        text.write(self.key)
-        text.write('834longgong567')
-        text.write(self.encrypted)
-    def load(self, filename='untitled'):
-        text = open('%s.txt' % filename, 'r')
-        self.key, self.encrypted = tuple(text.read().split('834longgong567'))
         
 
-class CipherDisk(object):
+class CipherDisk:
     '''
     For operation concerning Cipher Disk method.
     Attribute: A sequence of character, number of turns
@@ -94,19 +86,22 @@ class CipherDisk(object):
             else:
                 self.decrypted += longgong
         return self.decrypted
-    def save(self, filename='untitled'):
-        text = open('%s.txt' % filename, 'w')
-        text.write(self.key)
-        text.write('834longgong567')
-        text.write(self.encrypted)
-    def load(self, filename='untitled'):
-        text = open('%s.txt' % filename, 'r')
-        self.key, self.encrypted = tuple(text.read().split('834longgong567'))
 
-class AutoDetect(XOR):
-    def __init__(self):
-        #me = load()
+def save(self,filename='untitled'):
+    text = open('%s.txt' % filename, 'w')
+    text.write(self.key)
+    text.write('8151321542334longgong5789546512367')
+    text.write(self.encrypted)
+
+def load(filename='untitled'):
+    text = open('%s.txt' % filename, 'r')
+    return tuple(text.read().split('8151321542334longgong5789546512367'))
+
+class AutoDetect:
+    def __init__(self, filename):
+        print load(filename)
         Popup()
+
 
 class Popup():
     def __init__(self, title='Insert something amusing here.', message='This message is intentionally left blank, I guess...', message2='', message3=''):
@@ -122,20 +117,26 @@ class Popup():
         Label(self.root, text='').grid(row=0)
         ##End of disgraces//
         Button(self.root, command=self.root.destroy, text='Comprendo').grid(row=800)
+        
 
 class Mainmenu:
     def __init__(self):
         self.root = Tk()
         self.root.resizable(width=FALSE, height=FALSE)
-        self.root.geometry('{}x{}'.format(250, 260))
+        self.root.geometry('{}x{}'.format(300, 320))
         self.root.title('uDEncrypt')
-        Label(self.root, text='Welcome to uEncrypt 2000').grid(row=0)
+        Label(self.root, text='Welcome to uEncrypt 2000').grid(row=1)
         Label(self.root, text='Please select any type of encryption to begin').grid(row=400)
         Button(self.root, text="      XOR Encryption/Decryption      ", command=self.xor).grid(row=500)
         Button(self.root, text="      CipherDisk Encryption/Decryption      ", command=self.disk).grid(row=600)
+        Label(self.root, text='Or insert a saved encrypted filename for ease of access.').grid(row=698)
         Button(self.root, text="      Auto Detect      ", command=self.detect).grid(row=700)
+        self.filename = StringVar()
+        self.filename.set("untitled")
+        Entry(self.root, textvariable=self.filename).grid(row=699, column=0)
         Button(self.root, command=self.root.quit, text='        Terminate        ').grid(row=800)
         ##Spaces are disgraces//
+        Label(self.root, text='').grid(row=1)
         Label(self.root, text='').grid(row=401)
         Label(self.root, text='').grid(row=501)
         Label(self.root, text='').grid(row=701)
@@ -146,12 +147,25 @@ class Mainmenu:
         self.root.mainloop()
         
     def xor(self):
-        pass
+        if check_op():
+            pass
+        else:
+            opdisk = True
     
     def disk(self):
-        pass
+        if check_op():
+            pass
+        else:
+            opdisk = True
     
     def detect(self):
-        detect = AutoDetect()
-    
+        detect = AutoDetect(self.filename.get())
+
+def check_op():
+    global opxor
+    global opdisk
+    global opdet
+    if opxor or opdisk:
+        return True
+opxor, opdisk = 0, 0
 mane = Mainmenu()
