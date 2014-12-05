@@ -94,7 +94,7 @@ class CipherDisk(object):
             else:
                 self.decrypted += longgong
         return self.decrypted
-    def save(self, filename='untitled', pathname=''):
+    def save(self, filename='untitled'):
         text = open('%s.txt' % filename, 'w')
         text.write(self.key)
         text.write('834longgong567')
@@ -102,29 +102,56 @@ class CipherDisk(object):
     def load(self, filename='untitled'):
         text = open('%s.txt' % filename, 'r')
         self.key, self.encrypted = tuple(text.read().split('834longgong567'))
-    
-class GUI:
+
+class AutoDetect(XOR):
+    def __init__(self):
+        #me = load()
+        Popup()
+
+class Popup():
+    def __init__(self, title='Insert something amusing here.', message='This message is intentionally left blank, I guess...', message2='', message3=''):
+        self.root = Tk()
+        self.root.title(title)
+        self.root.resizable(width=FALSE, height=FALSE)
+        Label(self.root, text='%s%s%s' % (' '*(50-len(message)), message, ' '*(50-len(message)))).grid(row=1)
+        Label(self.root, text='%s%s%s' % (' '*(50-len(message2)), message2, ' '*(50-len(message2)))).grid(row=2)
+        Label(self.root, text='%s%s%s' % (' '*(50-len(message3)), message3, ' '*(50-len(message3)))).grid(row=3)
+        self.root.geometry('{}x{}'.format(300, 150))
+        ##Spaces are disgraces//
+        Label(self.root, text='').grid(row=4)
+        Label(self.root, text='').grid(row=0)
+        ##End of disgraces//
+        Button(self.root, command=self.root.destroy, text='Comprendo').grid(row=800)
+
+class Mainmenu:
     def __init__(self):
         self.root = Tk()
-        self.root.geometry('{}x{}'.format(250, 250))
+        self.root.resizable(width=FALSE, height=FALSE)
+        self.root.geometry('{}x{}'.format(250, 260))
         self.root.title('uDEncrypt')
         Label(self.root, text='Welcome to uEncrypt 2000').grid(row=0)
         Label(self.root, text='Please select any type of encryption to begin').grid(row=400)
-        Button(self.root, text="      XOR Encryption/Decryption      ", command=self.test).grid(row=500)
-        Button(self.root, text="      CipherDisk Encryption/Decryption      ", command=self.test).grid(row=600)
-        Button(self.root, command=self.root.quit, text='Exit').grid(row=700)
+        Button(self.root, text="      XOR Encryption/Decryption      ", command=self.xor).grid(row=500)
+        Button(self.root, text="      CipherDisk Encryption/Decryption      ", command=self.disk).grid(row=600)
+        Button(self.root, text="      Auto Detect      ", command=self.detect).grid(row=700)
+        Button(self.root, command=self.root.quit, text='        Terminate        ').grid(row=800)
         ##Spaces are disgraces//
         Label(self.root, text='').grid(row=401)
         Label(self.root, text='').grid(row=501)
-        Label(self.root, text='').grid(row=601)
+        Label(self.root, text='').grid(row=701)
         Label(self.root, text='').grid(row=602)
         Label(self.root, text='').grid(row=402)
         Label(self.root, text='').grid(row=0)
         ##End of disgraces//
         self.root.mainloop()
         
-
-    def test(self):
-        print 'gong'
-
-gui = GUI()
+    def xor(self):
+        pass
+    
+    def disk(self):
+        pass
+    
+    def detect(self):
+        detect = AutoDetect()
+    
+mane = Mainmenu()
