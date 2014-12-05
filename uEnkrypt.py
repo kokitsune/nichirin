@@ -15,7 +15,14 @@ class XOR:
         self.root = Tk()
         self.root.resizable(width=FALSE, height=FALSE)
         self.root.geometry('{}x{}'.format(300, 320))
-        self.root.title('XOR Encryption/Decryption')
+        self.root.title('XOR Cipher')
+        Label(self.root, text='   XOR cipher uses its namesake logic gate     ').grid(row=1)
+        Label(self.root, text='           to switch binary from 0 to 1 and vice versa.           ').grid(row=2)
+        self.original = StringVar()
+        Entry(self.root, textvariable=self.original).grid(row=4,padx=20,pady=20,columnspan=100, rowspan=100, sticky=W+E+N+S)
+        Button(self.root, text="      Back      ", command=self.quitting).grid(row=200)
+
+        #Non UI zone
         self.original = original
         self.key = key[-6:]
         self.key = '0'*(8-len(self.key))+self.key.replace('b', '')
@@ -50,6 +57,10 @@ class XOR:
         A layout for other methods.
         '''
         pass
+    def quitting(self):
+        global opening
+        opening = False
+        self.root.destroy()
         
 
 class CipherDisk:
@@ -62,16 +73,21 @@ class CipherDisk:
         self.root.resizable(width=FALSE, height=FALSE)
         self.root.geometry('{}x{}'.format(300, 320))
         self.root.title('CipherDisk Encryption/Decryption')
-        
+
+        #None UI zone
         self.original = original
         self.turn = turn
         if disk == None:
             self.disk = list('ABCDEFGHIJKLMNOPQRSTUVWXYZ')
-    def disk_tuning(self, position, char):
-        if position >= len(self.disk):
+    def disk_tuning(self, position, char, mode=''):
+        if char in self.disk and not mode == 'delete':
+            Popup('Achtung!', 'Attention : This Character is already in the disk', 'Please refrain from confusing the cryptographer.')
+        elif position >= len(self.disk):
             self.disk.append(char.upper())
         elif char == 'delete':
             self.disk.pop(position)
+        elif mode == 'delete':
+            self.disk.pop(self.disk.index(char))
         else:
             self.disk[position] = char.upper()
         return self.disk
@@ -95,6 +111,10 @@ class CipherDisk:
             else:
                 self.decrypted += longgong
         return self.decrypted
+    def quitting(self):
+        global opening
+        opening = False
+        self.root.destroy()
 
 def save(self,filename='untitled'):
     text = open('%s.txt' % filename, 'w')
@@ -108,8 +128,18 @@ def load(filename='untitled'):
 
 class AutoDetect:
     def __init__(self, filename):
-        print load(filename)
-        Popup()
+        try:
+            me = load(filename)
+            if len(me[0]) == 8:
+                for i in range(len(me[0])):
+                    if not me[0][i] in '01':
+                        stat = None
+                    elif i == 7:
+                        stat = 'bin'
+            else:
+                stat = None
+        except(IOError):
+            Popup('Achtung!', 'Attention : No such files specified.')
 
 
 class Popup():
@@ -120,7 +150,7 @@ class Popup():
         Label(self.root, text='%s%s%s' % (' '*(50-len(message)), message, ' '*(50-len(message)))).grid(row=1)
         Label(self.root, text='%s%s%s' % (' '*(50-len(message2)), message2, ' '*(50-len(message2)))).grid(row=2)
         Label(self.root, text='%s%s%s' % (' '*(50-len(message3)), message3, ' '*(50-len(message3)))).grid(row=3)
-        self.root.geometry('{}x{}'.format(300, 150))
+        self.root.geometry('{}x{}'.format(400, 150))
         ##Spaces are disgraces//
         Label(self.root, text='').grid(row=4)
         Label(self.root, text='').grid(row=0)
@@ -136,8 +166,8 @@ class Mainmenu:
         self.root.title('uDEncrypt')
         Label(self.root, text='Welcome to uEncrypt 2000').grid(row=1)
         Label(self.root, text='Please select any type of encryption to begin').grid(row=400)
-        Button(self.root, text="      XOR Encryption/Decryption      ", command=new_page_xor).grid(row=500)
-        Button(self.root, text="      CipherDisk Encryption/Decryption      ", command=new_page_disk).grid(row=600)
+        Button(self.root, text="      XOR Encryption/Decryption      ", command=self.xor).grid(row=500)
+        Button(self.root, text="      CipherDisk Encryption/Decryption      ", command=self.disk).grid(row=600)
         Label(self.root, text='Or insert a saved encrypted filename for ease of access.').grid(row=698)
         Button(self.root, text="      Auto Detect      ", command=self.detect).grid(row=700)
         self.filename = StringVar()
@@ -154,34 +184,36 @@ class Mainmenu:
         Label(self.root, text='').grid(row=0)
         ##End of disgraces//
         self.root.mainloop()
-        self.root.destroy()
         
     def xor(self):
         if check_op():
-            pass
+            denied()
         else:
-            opdisk = True
+            global opening
+            opening = True
+            current = XOR()
     
     def disk(self):
         if check_op():
-            pass
+            denied()
         else:
-            opdisk = True
+            global opening
+            opening = True
+            current = CipherDisk()
     
     def detect(self):
-        detect = AutoDetect(self.filename.get())
-
-def new_page_xor():
-    mode = XOR()
-    
-def new_page_disk():
-    mode = CipherDisk()
+        if check_op():
+            denied()
+        else:
+            current = AutoDetect(self.filename.get())
     
 def check_op():
-    global opxor
-    global opdisk
-    global opdet
-    if opxor or opdisk:
+    global opening
+    if opening:
         return True
-opxor, opdisk = 0, 0
+
+def denied():
+    Popup('Achtung!', 'You may not open multiple encryption window.', 'Close any remaining window other than mainmenu before continuing.')
+    
+opening = False
 mane = Mainmenu()
