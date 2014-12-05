@@ -12,6 +12,10 @@ class XOR:
     Attribute : A sequence of character.
     '''
     def __init__(self, original='Default', key='00000000'):
+        self.root = Tk()
+        self.root.resizable(width=FALSE, height=FALSE)
+        self.root.geometry('{}x{}'.format(300, 320))
+        self.root.title('XOR Encryption/Decryption')
         self.original = original
         self.key = key[-6:]
         self.key = '0'*(8-len(self.key))+self.key.replace('b', '')
@@ -54,6 +58,11 @@ class CipherDisk:
     Attribute: A sequence of character, number of turns
     '''
     def __init__(self, original='Default', turn=1, disk=None):
+        self.root = Tk()
+        self.root.resizable(width=FALSE, height=FALSE)
+        self.root.geometry('{}x{}'.format(300, 320))
+        self.root.title('CipherDisk Encryption/Decryption')
+        
         self.original = original
         self.turn = turn
         if disk == None:
@@ -127,8 +136,8 @@ class Mainmenu:
         self.root.title('uDEncrypt')
         Label(self.root, text='Welcome to uEncrypt 2000').grid(row=1)
         Label(self.root, text='Please select any type of encryption to begin').grid(row=400)
-        Button(self.root, text="      XOR Encryption/Decryption      ", command=self.xor).grid(row=500)
-        Button(self.root, text="      CipherDisk Encryption/Decryption      ", command=self.disk).grid(row=600)
+        Button(self.root, text="      XOR Encryption/Decryption      ", command=new_page_xor).grid(row=500)
+        Button(self.root, text="      CipherDisk Encryption/Decryption      ", command=new_page_disk).grid(row=600)
         Label(self.root, text='Or insert a saved encrypted filename for ease of access.').grid(row=698)
         Button(self.root, text="      Auto Detect      ", command=self.detect).grid(row=700)
         self.filename = StringVar()
@@ -145,6 +154,7 @@ class Mainmenu:
         Label(self.root, text='').grid(row=0)
         ##End of disgraces//
         self.root.mainloop()
+        self.root.destroy()
         
     def xor(self):
         if check_op():
@@ -161,6 +171,12 @@ class Mainmenu:
     def detect(self):
         detect = AutoDetect(self.filename.get())
 
+def new_page_xor():
+    mode = XOR()
+    
+def new_page_disk():
+    mode = CipherDisk()
+    
 def check_op():
     global opxor
     global opdisk
