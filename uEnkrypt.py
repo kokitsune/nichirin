@@ -2,7 +2,9 @@
 Project ala Pegeant:
     Encryption and Decryption.
 '''
+
 from Tkinter import *
+from os import *
 
 class XOR(object):
     '''
@@ -92,7 +94,7 @@ class CipherDisk(object):
             else:
                 self.decrypted += longgong
         return self.decrypted
-    def save(self, filename='untitled'):
+    def save(self, filename='untitled', pathname=''):
         text = open('%s.txt' % filename, 'w')
         text.write(self.key)
         text.write('834longgong567')
@@ -101,39 +103,28 @@ class CipherDisk(object):
         text = open('%s.txt' % filename, 'r')
         self.key, self.encrypted = tuple(text.read().split('834longgong567'))
     
-    
+class GUI:
+    def __init__(self):
+        self.root = Tk()
+        self.root.geometry('{}x{}'.format(250, 250))
+        self.root.title('uDEncrypt')
+        Label(self.root, text='Welcome to uEncrypt 2000').grid(row=0)
+        Label(self.root, text='Please select any type of encryption to begin').grid(row=400)
+        Button(self.root, text="      XOR Encryption/Decryption      ", command=self.test).grid(row=500)
+        Button(self.root, text="      CipherDisk Encryption/Decryption      ", command=self.test).grid(row=600)
+        Button(self.root, command=self.root.quit, text='Exit').grid(row=700)
+        ##Spaces are disgraces//
+        Label(self.root, text='').grid(row=401)
+        Label(self.root, text='').grid(row=501)
+        Label(self.root, text='').grid(row=601)
+        Label(self.root, text='').grid(row=602)
+        Label(self.root, text='').grid(row=402)
+        Label(self.root, text='').grid(row=0)
+        ##End of disgraces//
+        self.root.mainloop()
+        
 
+    def test(self):
+        print 'gong'
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+gui = GUI()
