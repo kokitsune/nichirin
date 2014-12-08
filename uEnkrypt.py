@@ -5,53 +5,69 @@ Project ala Pegeant:
 
 from Tkinter import *
 import os
+from random import randint
 
 class XOR:
     '''
     For operation concerning XOR method.
     Attribute : A sequence of character.
     '''
-    def __init__(self, original='Default', key='00000000'):
+    def __init__(self):
         self.root = Tk()
         self.root.resizable(width=FALSE, height=FALSE)
         self.root.geometry('{}x{}'.format(300, 320))
         self.root.title('XOR Cipher')
         Label(self.root, text='   XOR cipher uses its namesake logic gate     ').grid(row=1)
         Label(self.root, text='           to switch binary from 0 to 1 and vice versa.           ').grid(row=2)
-        self.original = StringVar()
-        Entry(self.root, textvariable=self.original).grid(row=4,padx=20,pady=20,columnspan=100, rowspan=100, sticky=W+E+N+S)
+        Label(self.root, text='Enter sequence of characters you wish to decrypt below.').grid(row=3)
+        self.original = StringVar(self.root)
+        self.original.set('Default')
+        Entry(self.root, textvariable=self.original).grid(row=4,columnspan=100, sticky=W+E+N+S)
+        self.stat = StringVar(self.root)
+        self.stat.set("Binary") # initial value
+        option = OptionMenu(self.root, self.stat, "Binary", "Number", "ASCII Character").grid(row=6)
+        Label(self.root, text='Select key type from below.').grid(row=5)
+        Label(self.root, text='Insert a key according to the type you choose.').grid(row=7)
+        self.rawkey = StringVar(self.root)
+        self.rawkey.set('00000000')
+        Entry(self.root, textvariable=self.rawkey).grid(row=8,column=0)
+        Button(self.root, text="      Begin Encryption/Decryption      ", command=self.encryption).grid(row=9)
         Button(self.root, text="      Back      ", command=self.quitting).grid(row=200)
+        Button(self.root, text="Test value carrier.", command=self.carry).grid(row=500)
 
-        #Non UI zone
-        self.original = original
-        self.key = key[-6:]
-        self.key = '0'*(8-len(self.key))+self.key.replace('b', '')
+        self.root.mainloop()
+    def carry(self):
+        print self.stat.get()
+        print self.rawkey.get()
+        print self.original.get()
     def __str__(self):
         return self.original
-    def get_key(self, stat='bin', key='00000000'):#Maximum MUST be 00111111
-        if stat == 'num':
-            self.key = bin(key)
+    def get_key(self):#Maximum MUST be 00111111
+        print self.rawkey.get()
+        if self.stat.get() == 'Number':
+            self.key = bin(int(self.rawkey.get()))[-6:]
+        elif self.stat.get() == 'ASCII Character':
+            self.key = bin(ord(self.rawkey.get()))[-6:]
         else:
-            self.key = key
-        self.key = key[-6:]
-        self.key = '0'*(8-len(self.key))+self.key.replace('b', '')
-        return self.key
+            self.key = self.rawkey.get()[-6:]
+        self.key = '0'*(8-len(self.key.replace('b', '')))+self.key.replace('b', '')
     def encryption(self):
         '''
         It's both the encryption and decryption actually.
         '''
+        self.get_key()
         self.encrypted = ''
-        for longgong in self.original:
+        for longgong in self.original.get():
             temp = ''
-            longgong = '%8s' % bin(ord(longgong)).replace('b', '')
+            longgong = '0'*(8-len(bin(ord(longgong.replace('b', '')))))+bin(ord(longgong)).replace('b', '')#OLD-> '%8s' % bin(ord(longgong)).replace('b', '')
             for tower, rook in zip(longgong.replace(' ', '0'), self.key):
                 if tower == rook:
                     temp += '0'
                 else:
                     temp += '1'
-            print longgong.replace(' ', '0'), self.key
+            print longgong.replace(' ', '0'), self.key, temp
             self.encrypted += chr(int(temp, 2))
-        return self.encrypted
+        print self.encrypted
     def decryption(self):
         '''
         A layout for other methods.
@@ -61,7 +77,9 @@ class XOR:
         global opening
         opening = False
         self.root.destroy()
-        
+        mane = Mainmenu()
+
+###############################################################END OF XOR############################################################################
 
 class CipherDisk:
     '''
@@ -136,6 +154,7 @@ class AutoDetect:
                         stat = None
                     elif i == 7:
                         stat = 'bin'
+                        Popup('Auto-Detect Report', 'This file uses XOR method.')
             else:
                 stat = None
         except(IOError):
@@ -191,6 +210,7 @@ class Mainmenu:
         else:
             global opening
             opening = True
+            self.root.destroy()
             current = XOR()
     
     def disk(self):
@@ -199,6 +219,7 @@ class Mainmenu:
         else:
             global opening
             opening = True
+            self.root.destroy()
             current = CipherDisk()
     
     def detect(self):
