@@ -4,42 +4,51 @@ Project ala Pegeant:
 '''
 
 from Tkinter import *
-import os
-from random import randint
+#import os
+#from random import randint
+richard = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'+'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.lower()+'0123456789;:/\'\\[]()*-+.'
 
 class XOR:
     '''
     For operation concerning XOR method.
     Attribute : A sequence of character.
     '''
-    def __init__(self):
+    def __init__(self, original='Default', rawkey='00000000', auto=False, filename='untitled'):
         self.root = Tk()
+        if auto:
+            self.filename = StringVar()
+            self.filename.set(filename)
+            self.load()
         self.root.resizable(width=FALSE, height=FALSE)
-        self.root.geometry('{}x{}'.format(300, 320))
+        self.root.geometry('{}x{}'.format(300, 400))
         self.root.title('XOR Cipher')
+        Label(self.root, text='').grid(row=3)
         Label(self.root, text='   XOR cipher uses its namesake logic gate     ').grid(row=1)
         Label(self.root, text='           to switch binary from 0 to 1 and vice versa.           ').grid(row=2)
-        Label(self.root, text='Enter sequence of characters you wish to decrypt below.').grid(row=3)
+        Label(self.root, text='Enter sequence of characters you wish to decrypt below.').grid(row=4)
         self.original = StringVar(self.root)
-        self.original.set('Default')
-        Entry(self.root, textvariable=self.original).grid(row=4,columnspan=100, sticky=W+E+N+S)
+        self.original.set(original)
+        Entry(self.root, textvariable=self.original).grid(row=5,columnspan=100, sticky=W+E+N+S)
         self.stat = StringVar(self.root)
         self.stat.set("Binary") # initial value
-        option = OptionMenu(self.root, self.stat, "Binary", "Number", "ASCII Character").grid(row=6)
-        Label(self.root, text='Select key type from below.').grid(row=5)
-        Label(self.root, text='Insert a key according to the type you choose.').grid(row=7)
+        option = OptionMenu(self.root, self.stat, "Binary", "Number", "ASCII Character").grid(row=7)
+        Label(self.root, text='Select key type from below.').grid(row=6)
+        Label(self.root, text='Insert a key according to the type you choose.').grid(row=8)
         self.rawkey = StringVar(self.root)
-        self.rawkey.set('00000000')
-        Entry(self.root, textvariable=self.rawkey).grid(row=8,column=0)
-        Button(self.root, text="      Begin Encryption/Decryption      ", command=self.encryption).grid(row=9)
+        self.rawkey.set(rawkey)
+        Entry(self.root, textvariable=self.rawkey).grid(row=9,column=0)
+        Button(self.root, text="      Begin Encryption/Decryption      ", command=self.encryption).grid(row=10)
+        Label(self.root, text='').grid(row=100)
+        Label(self.root, text='Filename').grid(row=101)
+        self.filename = StringVar(self.root)
+        self.filename.set('untitled')
+        Entry(self.root, textvariable=self.filename).grid(row=105)
+        Button(self.root, text="      Save      ", command=self.save).grid(row=106)
+        Button(self.root, text="      Load      ", command=self.load).grid(row=107)
+        Label(self.root, text='').grid(row=108)
         Button(self.root, text="      Back      ", command=self.quitting).grid(row=200)
-        Button(self.root, text="Test value carrier.", command=self.carry).grid(row=500)
 
         self.root.mainloop()
-    def carry(self):
-        print self.stat.get()
-        print self.rawkey.get()
-        print self.original.get()
     def __str__(self):
         return self.original
     def get_key(self):#Maximum MUST be 00111111
@@ -68,6 +77,7 @@ class XOR:
             print longgong.replace(' ', '0'), self.key, temp
             self.encrypted += chr(int(temp, 2))
         print self.encrypted
+        PopupResult('XOR Cipher', self.encrypted)
     def decryption(self):
         '''
         A layout for other methods.
@@ -78,6 +88,94 @@ class XOR:
         opening = False
         self.root.destroy()
         mane = Mainmenu()
+
+    def save(self):
+        text = open('%s.txt' % self.filename.get(), 'w')
+        text.write('bindingofclarke')
+        text.write('jaaaaiaaayaaaason!jaaaasonjasonjaeeeaason')
+        text.write(self.key)
+        text.write('8151321542334longgong5789546512367')
+        text.write(self.encrypted)
+
+    def load(self):
+        text = open('%s.txt' % self.filename.get(), 'r')
+        cur = text.read().split('jaaaaiaaayaaaason!jaaaasonjasonjaeeeaason',1)[1]
+        rawkey, original = cur.split('8151321542334longgong5789546512367')
+        self.root.destroy()
+        current = XOR(original, rawkey)
+##    def data(self):
+##        self.root.destroy()
+##        currentdata = XORdata(self.original, self.key)
+        
+##class XORdata:
+##    def __init__(self, orginal='', key=''):
+##        self.root = Tk()
+##        self.root.resizable(width=FALSE, height=FALSE)
+##        self.root.geometry('{}x{}'.format(300, 320))
+##        self.root.title('XOR Cipher save')
+##        self.filename = StringVar(self.filename)
+##        self.filename.set(self.filename)
+##        Entry(self.root, textvariable=self.filename).grid(row=4,columnspan=100, sticky=W+E+N+S)
+##        Button(self.root, text="      Save      ", command=self.save).grid(row=101)
+##        Button(self.root, text="      Load      ", command=self.load).grid(row=102)
+##        Button(self.root, text="      Back      ", command=self.load).grid(row=103)
+##        
+##        
+##    def save(self):
+##        lionheart = richard.replace('1','').replace('0', '')
+##        rainbow = ''
+##        text = open('%s.txt' % self.filename, 'w')
+##        text.write('bindingofclarke')
+##        text.write('jaaaaiaaayaaaason!jaaaasonjasonjaeeeaason')
+##        for i in range(8):
+##            rainbow += self.key[i]
+##            curry = ''
+##            if not i == 7:
+##                curry += lionheart(randint(0,len(lionheart)-1))
+##                curry += lionheart(randint(0,len(lionheart)-1))
+##                curry += lionheart(randint(0,len(lionheart)-1))
+##                curry += lionheart(randint(0,len(lionheart)-1))
+##                curry += lionheart(randint(0,len(lionheart)-1))
+##                curry += lionheart(randint(0,len(lionheart)-1))
+##                curry += lionheart(randint(0,len(lionheart)-1))
+##                curry += lionheart(randint(0,len(lionheart)-1))
+##                curry += lionheart(randint(0,len(lionheart)-1))
+##                curry += lionheart(randint(0,len(lionheart)-1))
+##                ran = randint(0,10)
+##                while ran
+##                    curry += lionheart(randint(0,len(lionheart)-1))
+##                    ran = randint(0,10)
+##            text.write(curry+'insertnameodkfldspdkssakelawofthewestlslspdofksoskdow')
+##            rainbow += curry
+##        for i in self.original:
+##            rainbow += i
+##            curry = ''
+##            curry += lionheart(randint(0,len(lionheart)-1))
+##            curry += lionheart(randint(0,len(lionheart)-1))
+##            curry += lionheart(randint(0,len(lionheart)-1))
+##            curry += lionheart(randint(0,len(lionheart)-1))
+##            curry += lionheart(randint(0,len(lionheart)-1))
+##            curry += lionheart(randint(0,len(lionheart)-1))
+##            curry += lionheart(randint(0,len(lionheart)-1))
+##            curry += lionheart(randint(0,len(lionheart)-1))
+##            curry += lionheart(randint(0,len(lionheart)-1))
+##            curry += lionheart(randint(0,len(lionheart)-1))
+##            ran = randint(0,10)
+##            while ran
+##                curry += lionheart(randint(0,len(lionheart)-1))
+##                ran = randint(0,10)
+##            rainbow += curry
+##            text.write(curry+'insertnameodkfldspdkssakelawofthewestlslspdofksoskdow')
+##        text.write(rainbow)
+##
+##    def load(self):
+##        text = open('%s.txt' % self.filename, 'r')
+##        cur = text.read().split('jaaaaiaaayaaaason!jaaaasonjasonjaeeeaason',1)[1]
+##        cur = cur.split()
+##
+##    def back(self):
+##        self.root.destroy()
+##        current = XOR(self.original, self.key)
 
 ###############################################################END OF XOR############################################################################
 
@@ -134,31 +232,36 @@ class CipherDisk:
         opening = False
         self.root.destroy()
 
-def save(self,filename='untitled'):
-    text = open('%s.txt' % filename, 'w')
-    text.write(self.key)
-    text.write('8151321542334longgong5789546512367')
-    text.write(self.encrypted)
+    def save(self,filename='untitled'):
+        text = open('%s.txt' % filename, 'w')
+        text.write(self.key)
+        text.write('8151321542334longgong5789546512367')
+        text.write(self.encrypted)
+
+    def load(filename='untitled'):
+        text = open('%s.txt' % filename, 'r')
+        return tuple(text.read().split('8151321542334longgong5789546512367'))
 
 def load(filename='untitled'):
     text = open('%s.txt' % filename, 'r')
-    return tuple(text.read().split('8151321542334longgong5789546512367'))
+    return tuple(text.read().split('jaaaaiaaayaaaason!jaaaasonjasonjaeeeaason'))
 
 class AutoDetect:
     def __init__(self, filename):
         try:
             me = load(filename)
-            if len(me[0]) == 8:
-                for i in range(len(me[0])):
-                    if not me[0][i] in '01':
-                        stat = None
-                    elif i == 7:
-                        stat = 'bin'
-                        Popup('Auto-Detect Report', 'This file uses XOR method.')
+            if me[0] == 'bindingofclarke':
+                Popup('Auto-Detect Report', '      This file uses XOR method.      ', 'Taking you there.')
+                current = XOR('', '', True, filename)
+            elif me[0] == 'Cesareborgia':
+                Popup('Auto-Detect Report', '       This file uses Cipher Disk method.        ', 'Taking you there.')
+                current = CipherDisk()
             else:
-                stat = None
+                Popup('Achtung!', 'The program cannot recognize this files.', 'Which makes it near 100% that it can not be decrypted.')
+                mane = Mainmenu()
         except(IOError):
             Popup('Achtung!', 'Attention : No such files specified.')
+            mane = Mainmenu()
 
 
 class Popup():
@@ -175,6 +278,21 @@ class Popup():
         Label(self.root, text='').grid(row=0)
         ##End of disgraces//
         Button(self.root, command=self.root.destroy, text='Comprendo').grid(row=800)
+
+class PopupResult():
+    def __init__(self, title='Insert Title', bunny='A result'):
+        self.root = Tk()
+        self.root.resizable(width=FALSE, height=FALSE)
+        self.root.geometry('{}x{}'.format(400, 150))
+        self.root.title(title)
+        Label(self.root, text='                                                                                                                             ').grid(row=0)
+        Label(self.root, text='The result is in.').grid(row=1)
+        Label(self.root, text='').grid(row=2)
+        Label(self.root, text='').grid(row=5)
+        message = StringVar(self.root)
+        message.set(bunny)
+        Entry(self.root, textvariable=message).grid(row=4,columnspan=5,rowspan=250, sticky=W+E+N+S)
+        Button(self.root, command=self.root.destroy, text='Comprendo').grid(row=500)
         
 
 class Mainmenu:
@@ -205,36 +323,21 @@ class Mainmenu:
         self.root.mainloop()
         
     def xor(self):
-        if check_op():
-            denied()
-        else:
-            global opening
-            opening = True
-            self.root.destroy()
-            current = XOR()
+        self.root.destroy()
+        current = XOR()
     
     def disk(self):
-        if check_op():
-            denied()
-        else:
-            global opening
-            opening = True
-            self.root.destroy()
-            current = CipherDisk()
+        self.root.destroy()
+        current = CipherDisk()
     
     def detect(self):
-        if check_op():
-            denied()
-        else:
-            current = AutoDetect(self.filename.get())
+        self.root.destroy()
+        current = AutoDetect(self.filename.get())
     
 def check_op():
     global opening
     if opening:
         return True
-
-def denied():
-    Popup('Achtung!', 'You may not open multiple encryption window.', 'Close any remaining window other than mainmenu before continuing.')
     
 opening = False
 mane = Mainmenu()
