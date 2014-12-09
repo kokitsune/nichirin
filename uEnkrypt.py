@@ -84,8 +84,6 @@ class XOR:
         '''
         pass
     def quitting(self):
-        global opening
-        opening = False
         self.root.destroy()
         mane = Mainmenu()
 
@@ -100,7 +98,7 @@ class XOR:
     def load(self):
         text = open('%s.txt' % self.filename.get(), 'r')
         cur = text.read().split('jaaaaiaaayaaaason!jaaaasonjasonjaeeeaason',1)[1]
-        rawkey, original = cur.split('8151321542334longgong5789546512367')
+        rawkey, original = cur.split('8151321542334longgong5789546512367', 1)
         self.root.destroy()
         current = XOR(original, rawkey)
 ##    def data(self):
@@ -184,64 +182,110 @@ class CipherDisk:
     For operation concerning Cipher Disk method.
     Attribute: A sequence of character, number of turns
     '''
-    def __init__(self, original='Default', turn=1, disk=None):
+    def __init__(self, original='Default', turn='1', disk='ABCDEFGHIJKLMNOPQRSTUVWXYZ', auto=False, filename=''):
         self.root = Tk()
+        if auto:
+            self.filename = StringVar()
+            self.filename.set(filename)
+            self.load()
         self.root.resizable(width=FALSE, height=FALSE)
-        self.root.geometry('{}x{}'.format(300, 320))
-        self.root.title('CipherDisk Encryption/Decryption')
-
-        #None UI zone
-        self.original = original
-        self.turn = turn
-        if disk == None:
-            self.disk = list('ABCDEFGHIJKLMNOPQRSTUVWXYZ')
-    def disk_tuning(self, position, char, mode=''):
-        if char in self.disk and not mode == 'delete':
-            Popup('Achtung!', 'Attention : This Character is already in the disk', 'Please refrain from confusing the cryptographer.')
-        elif position >= len(self.disk):
-            self.disk.append(char.upper())
-        elif char == 'delete':
-            self.disk.pop(position)
-        elif mode == 'delete':
-            self.disk.pop(self.disk.index(char))
-        else:
-            self.disk[position] = char.upper()
-        return self.disk
+        self.root.geometry('{}x{}'.format(310, 480))
+        self.root.title('Cipher Disk')
+        Label(self.root, text='').grid(row=3)
+        Label(self.root, text='   While not as cool as the German Enigma     ').grid(row=1)
+        Label(self.root, text='There are people who are oblivious to this method.').grid(row=2)
+        Label(self.root, text='Enter sequence of characters you wish to decrypt below.').grid(row=4)
+        Label(self.root, text='Any character not in the disk will not be altered.').grid(row=5)
+        self.original = StringVar(self.root)
+        self.original.set(original)
+        Entry(self.root, textvariable=self.original).grid(row=6,columnspan=100, sticky=W+E+N+S)
+        Label(self.root, text='Specify a number of turn in integer. (Shift)').grid(row=7)
+        self.turn = StringVar(self.root)
+        self.turn.set(turn)
+        Entry(self.root, textvariable=self.turn).grid(row=10,columnspan=1)
+        Label(self.root, text='Alter the Cipher Disk below.').grid(row=14)
+        self.disk = StringVar(self.root)
+        self.disk.set(disk)
+        Entry(self.root, textvariable=self.disk).grid(row=15,columnspan=2, sticky=W+E+N+S)
+        Label(self.root, text='').grid(row=16)
+##        self.stat = StringVar(self.root)
+##        self.stat.set("Normal") # initial value ####Although slider is a nice addition, I believe that typing yourself is more user friendly.
+##        Scale(self.root, from_=0, to=len(self.disk), orient='horizontal').grid(row=7)
+##        option = OptionMenu(self.root, self.stat, "Normal", "Replace", "Delete").grid(row=8)
+        Button(self.root, text="      Begin Encryption      ", command=self.encryption).grid(row=20)
+        Button(self.root, text="      Begin Decryption      ", command=self.decryption).grid(row=21)
+        Label(self.root, text='').grid(row=100)
+        Label(self.root, text='Filename').grid(row=101)
+        self.filename = StringVar(self.root)
+        self.filename.set('untitled')
+        Entry(self.root, textvariable=self.filename).grid(row=105)
+        Button(self.root, text="      Save      ", command=self.save).grid(row=106)
+        Button(self.root, text="      Load      ", command=self.load).grid(row=107)
+        Label(self.root, text='').grid(row=199)
+        Button(self.root, text="      Back      ", command=self.quitting).grid(row=200)
+        
+##    def disk_tuning(self, position, char, mode=''):
+##        if char in self.disk and not mode == 'delete':
+##            Popup('Achtung!', 'Attention : This Character is already in the disk', 'Please refrain from confusing the cryptographer.')
+##        elif len(char) > 1:
+##            Popup('Achtung!', 'Attention : Only a character can be added to disk.')
+##        elif mode == 'Delete':
+##            self.disk.pop(self.disk.index(char))
+##        elif mode == 'Replace':
+##            self.disk = self.disk[:position]+list(char)+self.disk[position:]
+##        elif position >= len(self.disk):
+##            self.disk.append(char.upper())
+##        else:
+##            self.disk[position] = char.upper()
+##        return self.disk
+        self.root.mainloop()
+        
     def encryption(self):
         self.encrypted = ''
-        for longgong in self.original:
-            if longgong in self.disk:
-                self.encrypted += self.disk[(self.disk.index(longgong)+self.turn)%len(self.disk)]
-            elif longgong.upper() in self.disk:
-                self.encrypted += self.disk[(self.disk.index(longgong.upper())+self.turn)%len(self.disk)].lower()
+        for longgong in self.original.get():
+            if longgong in self.disk.get():
+                self.encrypted += self.disk.get()[(self.disk.get().index(longgong)+int(self.turn.get()))%len(self.disk.get())]
+            elif longgong.upper() in self.disk.get():
+                self.encrypted += self.disk.get()[(self.disk.get().index(longgong.upper())+int(self.turn.get()))%len(self.disk.get())].lower()
             else:
                 self.encrypted += longgong
-        return self.encrypted
+        print self.encrypted
+        PopupResult('Cipher Disk', self.encrypted)
+        
     def decryption(self):
         self.decrypted = ''
-        for longgong in self.original:
-            if longgong in self.disk:
-                self.decrypted += self.disk[abs(self.disk.index(longgong)-self.turn)%len(self.disk)]
-            elif longgong.upper() in self.disk:
-                self.decrypted += self.disk[abs(self.disk.index(longgong.upper())-self.turn)%len(self.disk)].lower()
+        for longgong in self.original.get():
+            if longgong in self.disk.get():
+                self.decrypted += self.disk.get()[(self.disk.get().index(longgong)-int(self.turn.get()))%len(self.disk.get())]
+            elif longgong.upper() in self.disk.get():
+                self.decrypted += self.disk.get()[(self.disk.get().index(longgong.upper())-int(self.turn.get()))%len(self.disk.get())].lower()
             else:
                 self.decrypted += longgong
-        return self.decrypted
+        print self.decrypted
+        PopupResult('Cipher Disk', self.decrypted)
+        
     def quitting(self):
-        global opening
-        opening = False
         self.root.destroy()
+        mane = Mainmenu()
 
-    def save(self,filename='untitled'):
-        text = open('%s.txt' % filename, 'w')
-        text.write(self.key)
+    def save(self):
+        text = open('%s.txt' % self.filename.get(), 'w')
+        text.write('Cesareborgia')
+        text.write('jaaaaiaaayaaaason!jaaaasonjasonjaeeeaason')
+        text.write(self.disk.get())
+        text.write('shauunshaunnasdsafyaaaashaunnnnnwaaksdjdisal')
+        text.write(self.turn.get())
         text.write('8151321542334longgong5789546512367')
         text.write(self.encrypted)
 
-    def load(filename='untitled'):
-        text = open('%s.txt' % filename, 'r')
-        return tuple(text.read().split('8151321542334longgong5789546512367'))
-
+    def load(self):
+        text = open('%s.txt' % self.filename.get(), 'r')
+        cur = text.read().split('jaaaaiaaayaaaason!jaaaasonjasonjaeeeaason',1)[1]
+        disk, cur = cur.split('shauunshaunnasdsafyaaaashaunnnnnwaaksdjdisal', 1)
+        turn, original = cur.split('8151321542334longgong5789546512367', 1)
+        self.root.destroy()
+        current = CipherDisk(original, turn, disk)
+        
 def load(filename='untitled'):
     text = open('%s.txt' % filename, 'r')
     return tuple(text.read().split('jaaaaiaaayaaaason!jaaaasonjasonjaeeeaason'))
@@ -255,7 +299,7 @@ class AutoDetect:
                 current = XOR('', '', True, filename)
             elif me[0] == 'Cesareborgia':
                 Popup('Auto-Detect Report', '       This file uses Cipher Disk method.        ', 'Taking you there.')
-                current = CipherDisk()
+                current = CipherDisk('', '', '', True, filename)
             else:
                 Popup('Achtung!', 'The program cannot recognize this files.', 'Which makes it near 100% that it can not be decrypted.')
                 mane = Mainmenu()
@@ -307,7 +351,7 @@ class Mainmenu:
         Button(self.root, text="      CipherDisk Encryption/Decryption      ", command=self.disk).grid(row=600)
         Label(self.root, text='Or insert a saved encrypted filename for ease of access.').grid(row=698)
         Button(self.root, text="      Auto Detect      ", command=self.detect).grid(row=700)
-        self.filename = StringVar()
+        self.filename = StringVar(self.root)
         self.filename.set("untitled")
         Entry(self.root, textvariable=self.filename).grid(row=699, column=0)
         Button(self.root, command=self.root.quit, text='        Terminate        ').grid(row=800)
@@ -333,11 +377,5 @@ class Mainmenu:
     def detect(self):
         self.root.destroy()
         current = AutoDetect(self.filename.get())
-    
-def check_op():
-    global opening
-    if opening:
-        return True
-    
-opening = False
+
 mane = Mainmenu()
