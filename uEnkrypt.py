@@ -4,9 +4,6 @@ Project ala Pegeant:
 '''
 
 from Tkinter import *
-#import os
-#from random import randint
-richard = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'+'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.lower()+'0123456789;:/\'\\[]()*-+.'
 
 class XOR:
     '''
@@ -88,92 +85,26 @@ class XOR:
         mane = Mainmenu()
 
     def save(self):
-        text = open('%s.txt' % self.filename.get(), 'w')
-        text.write('bindingofclarke')
-        text.write('jaaaaiaaayaaaason!jaaaasonjasonjaeeeaason')
-        text.write(self.key)
-        text.write('8151321542334longgong5789546512367')
-        text.write(self.encrypted)
+        try:
+            text = open('%s.txt' % self.filename.get(), 'w')
+            text.write('bindingofclarke')
+            text.write('jaaaaiaaayaaaason!jaaaasonjasonjaeeeaason')
+            text.write(self.key)
+            text.write('8151321542334longgong5789546512367')
+            text.write(self.encrypted)
+            Popup('XOR Save', 'Save completed.')
+        except:
+            Popup('XOR Save', 'Save Failed.')
 
     def load(self):
-        text = open('%s.txt' % self.filename.get(), 'r')
-        cur = text.read().split('jaaaaiaaayaaaason!jaaaasonjasonjaeeeaason',1)[1]
-        rawkey, original = cur.split('8151321542334longgong5789546512367', 1)
-        self.root.destroy()
-        current = XOR(original, rawkey)
-##    def data(self):
-##        self.root.destroy()
-##        currentdata = XORdata(self.original, self.key)
-        
-##class XORdata:
-##    def __init__(self, orginal='', key=''):
-##        self.root = Tk()
-##        self.root.resizable(width=FALSE, height=FALSE)
-##        self.root.geometry('{}x{}'.format(300, 320))
-##        self.root.title('XOR Cipher save')
-##        self.filename = StringVar(self.filename)
-##        self.filename.set(self.filename)
-##        Entry(self.root, textvariable=self.filename).grid(row=4,columnspan=100, sticky=W+E+N+S)
-##        Button(self.root, text="      Save      ", command=self.save).grid(row=101)
-##        Button(self.root, text="      Load      ", command=self.load).grid(row=102)
-##        Button(self.root, text="      Back      ", command=self.load).grid(row=103)
-##        
-##        
-##    def save(self):
-##        lionheart = richard.replace('1','').replace('0', '')
-##        rainbow = ''
-##        text = open('%s.txt' % self.filename, 'w')
-##        text.write('bindingofclarke')
-##        text.write('jaaaaiaaayaaaason!jaaaasonjasonjaeeeaason')
-##        for i in range(8):
-##            rainbow += self.key[i]
-##            curry = ''
-##            if not i == 7:
-##                curry += lionheart(randint(0,len(lionheart)-1))
-##                curry += lionheart(randint(0,len(lionheart)-1))
-##                curry += lionheart(randint(0,len(lionheart)-1))
-##                curry += lionheart(randint(0,len(lionheart)-1))
-##                curry += lionheart(randint(0,len(lionheart)-1))
-##                curry += lionheart(randint(0,len(lionheart)-1))
-##                curry += lionheart(randint(0,len(lionheart)-1))
-##                curry += lionheart(randint(0,len(lionheart)-1))
-##                curry += lionheart(randint(0,len(lionheart)-1))
-##                curry += lionheart(randint(0,len(lionheart)-1))
-##                ran = randint(0,10)
-##                while ran
-##                    curry += lionheart(randint(0,len(lionheart)-1))
-##                    ran = randint(0,10)
-##            text.write(curry+'insertnameodkfldspdkssakelawofthewestlslspdofksoskdow')
-##            rainbow += curry
-##        for i in self.original:
-##            rainbow += i
-##            curry = ''
-##            curry += lionheart(randint(0,len(lionheart)-1))
-##            curry += lionheart(randint(0,len(lionheart)-1))
-##            curry += lionheart(randint(0,len(lionheart)-1))
-##            curry += lionheart(randint(0,len(lionheart)-1))
-##            curry += lionheart(randint(0,len(lionheart)-1))
-##            curry += lionheart(randint(0,len(lionheart)-1))
-##            curry += lionheart(randint(0,len(lionheart)-1))
-##            curry += lionheart(randint(0,len(lionheart)-1))
-##            curry += lionheart(randint(0,len(lionheart)-1))
-##            curry += lionheart(randint(0,len(lionheart)-1))
-##            ran = randint(0,10)
-##            while ran
-##                curry += lionheart(randint(0,len(lionheart)-1))
-##                ran = randint(0,10)
-##            rainbow += curry
-##            text.write(curry+'insertnameodkfldspdkssakelawofthewestlslspdofksoskdow')
-##        text.write(rainbow)
-##
-##    def load(self):
-##        text = open('%s.txt' % self.filename, 'r')
-##        cur = text.read().split('jaaaaiaaayaaaason!jaaaasonjasonjaeeeaason',1)[1]
-##        cur = cur.split()
-##
-##    def back(self):
-##        self.root.destroy()
-##        current = XOR(self.original, self.key)
+        try:
+            text = open('%s.txt' % self.filename.get(), 'r')
+            cur = text.read().split('jaaaaiaaayaaaason!jaaaasonjasonjaeeeaason',1)[1]
+            rawkey, original = cur.split('8151321542334longgong5789546512367', 1)
+            self.root.destroy()
+            current = XOR(original, rawkey)
+        except:
+            Popup('XOR Load', 'Load Failed.')
 
 ###############################################################END OF XOR############################################################################
 
@@ -208,10 +139,6 @@ class CipherDisk:
         self.disk.set(disk)
         Entry(self.root, textvariable=self.disk).grid(row=15,columnspan=2, sticky=W+E+N+S)
         Label(self.root, text='').grid(row=16)
-##        self.stat = StringVar(self.root)
-##        self.stat.set("Normal") # initial value ####Although slider is a nice addition, I believe that typing yourself is more user friendly.
-##        Scale(self.root, from_=0, to=len(self.disk), orient='horizontal').grid(row=7)
-##        option = OptionMenu(self.root, self.stat, "Normal", "Replace", "Delete").grid(row=8)
         Button(self.root, text="      Begin Encryption      ", command=self.encryption).grid(row=20)
         Button(self.root, text="      Begin Decryption      ", command=self.decryption).grid(row=21)
         Label(self.root, text='').grid(row=100)
@@ -223,21 +150,6 @@ class CipherDisk:
         Button(self.root, text="      Load      ", command=self.load).grid(row=107)
         Label(self.root, text='').grid(row=199)
         Button(self.root, text="      Back      ", command=self.quitting).grid(row=200)
-        
-##    def disk_tuning(self, position, char, mode=''):
-##        if char in self.disk and not mode == 'delete':
-##            Popup('Achtung!', 'Attention : This Character is already in the disk', 'Please refrain from confusing the cryptographer.')
-##        elif len(char) > 1:
-##            Popup('Achtung!', 'Attention : Only a character can be added to disk.')
-##        elif mode == 'Delete':
-##            self.disk.pop(self.disk.index(char))
-##        elif mode == 'Replace':
-##            self.disk = self.disk[:position]+list(char)+self.disk[position:]
-##        elif position >= len(self.disk):
-##            self.disk.append(char.upper())
-##        else:
-##            self.disk[position] = char.upper()
-##        return self.disk
         self.root.mainloop()
         
     def encryption(self):
@@ -269,22 +181,29 @@ class CipherDisk:
         mane = Mainmenu()
 
     def save(self):
-        text = open('%s.txt' % self.filename.get(), 'w')
-        text.write('Cesareborgia')
-        text.write('jaaaaiaaayaaaason!jaaaasonjasonjaeeeaason')
-        text.write(self.disk.get())
-        text.write('shauunshaunnasdsafyaaaashaunnnnnwaaksdjdisal')
-        text.write(self.turn.get())
-        text.write('8151321542334longgong5789546512367')
-        text.write(self.encrypted)
+        try:
+            text = open('%s.txt' % self.filename.get(), 'w')
+            text.write('Cesareborgia')
+            text.write('jaaaaiaaayaaaason!jaaaasonjasonjaeeeaason')
+            text.write(self.disk.get())
+            text.write('shauunshaunnasdsafyaaaashaunnnnnwaaksdjdisal')
+            text.write(self.turn.get())
+            text.write('8151321542334longgong5789546512367')
+            text.write(self.encrypted)
+            Popup('CipherDisk Save', 'Save Completed.')
+        except:
+            Popup('CipherDisk Save', 'Save Failed.')
 
     def load(self):
-        text = open('%s.txt' % self.filename.get(), 'r')
-        cur = text.read().split('jaaaaiaaayaaaason!jaaaasonjasonjaeeeaason',1)[1]
-        disk, cur = cur.split('shauunshaunnasdsafyaaaashaunnnnnwaaksdjdisal', 1)
-        turn, original = cur.split('8151321542334longgong5789546512367', 1)
-        self.root.destroy()
-        current = CipherDisk(original, turn, disk)
+        try:
+            text = open('%s.txt' % self.filename.get(), 'r')
+            cur = text.read().split('jaaaaiaaayaaaason!jaaaasonjasonjaeeeaason',1)[1]
+            disk, cur = cur.split('shauunshaunnasdsafyaaaashaunnnnnwaaksdjdisal', 1)
+            turn, original = cur.split('8151321542334longgong5789546512367', 1)
+            self.root.destroy()
+            current = CipherDisk(original, turn, disk)
+        except:
+            Popup('CipherDisk Load', 'Load Failed.')
         
 def load(filename='untitled'):
     text = open('%s.txt' % filename, 'r')
